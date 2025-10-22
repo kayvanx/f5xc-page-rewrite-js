@@ -1,1 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting to Non-WWW...</title>
+    <!-- 
+      KF - Oct 2025
+      This script checks if the current hostname starts with "www." 
+      and, if so, constructs a new URL without it while preserving 
+      the path, query parameters, and hash fragment, then redirects the user.
+    -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentHostname = window.location.hostname;
+            
+            if (currentHostname.startsWith('www.')) {
+                const nonWwwHostname = currentHostname.substring(4); // Removes 'www.'
+                
+                const statusElement = document.getElementById('status');
+                if (statusElement) {
+                    statusElement.textContent = `Redirecting to ${nonWwwHostname}...`;
+                }
 
+                const newUrl = 
+                      window.location.protocol + 
+                      '//' + 
+                      nonWwwHostname +
+                      window.location.pathname + 
+                      window.location.search + 
+                      window.location.hash;
+                
+                // Perform the redirection. 
+                console.log(`Redirecting from ${window.location.href} to ${newUrl}`);
+                window.location.replace(newUrl);
+
+            } else {
+                // The URL is already correct (no "www."), 
+                // console.log("KF - hostname does not start with 'www.'. No redirection needed.");
+            }
+        });
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .message {
+            font-size: 1.125rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="spinner"></div>
+        <p class="message" id="status">
+            Redirecting to the correct domain...
+        </p>
+    </div>
+</body>
+</html>
